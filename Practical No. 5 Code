@@ -1,0 +1,57 @@
+# Load packages
+library(dplyr)
+library(readr)
+
+# Load wine dataset
+wine <- read_csv("wine_dataset.csv")
+
+# Inspect structure
+head(wine)
+glimpse(wine)
+
+### -------------------------------------------------------
+### Example 1: Sort by one variable (ascending)
+### -------------------------------------------------------
+
+# Sort by alcohol content (lowest first)
+wine_sorted_alcohol <- wine |>
+  arrange(alcohol)
+
+head(wine_sorted_alcohol, 5)
+
+### -------------------------------------------------------
+### Example 2: Sort by one variable (descending)
+### -------------------------------------------------------
+
+# Sort by quality (highest quality wines first)
+wine_sorted_quality_desc <- wine |>
+  arrange(desc(quality))
+
+head(wine_sorted_quality_desc, 5)
+
+### -------------------------------------------------------
+### Example 3: Sort by multiple variables
+### -------------------------------------------------------
+
+# Sort by type of acid: first fixed acidity ascending,
+# then within each group sort by volatile acidity descending
+wine_multi_sort <- wine |>
+  arrange(fixed.acidity, desc(volatile.acidity))
+
+head(wine_multi_sort, 10)
+
+### -------------------------------------------------------
+### Example 4: Combined filter + sort
+### -------------------------------------------------------
+
+# Filter wines with high alcohol content (> 12%)
+# Then sort by sulphates (ascending)
+high_alcohol_sorted <- wine |>
+  filter(alcohol > 12) |>
+  arrange(sulphates)
+
+cat("Top 5 high-alcohol wines with lowest sulphates:\n")
+high_alcohol_sorted |>
+  select(alcohol, sulphates, quality) |>
+  head(5) |>
+  print()
