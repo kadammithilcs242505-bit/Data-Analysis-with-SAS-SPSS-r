@@ -1,0 +1,58 @@
+library(dplyr)
+library(readr)
+
+# Load the dataset
+tips <- read_csv("tips.csv")
+
+# Inspect dataset
+head(tips)
+glimpse(tips)
+
+### -----------------------------------------------------
+### Method 1: Using base R subset()
+### -----------------------------------------------------
+
+# Example 1: Single condition
+# Filter for bills greater than $30
+high_bill_subset <- subset(tips, total_bill > 30)
+cat("Number of large bills (total_bill > 30):", nrow(high_bill_subset), "\n")
+summary(high_bill_subset$total_bill)
+
+# Example 2: Multiple conditions (AND)
+# Bills > 30 AND table size > 3 people
+large_group_large_bill <- subset(tips, total_bill > 30 & size > 3)
+cat("Large bill + large group:", nrow(large_group_large_bill), "\n")
+head(large_group_large_bill)
+
+# Example 3: OR condition
+# Customers who are smokers OR gave a tip greater than $6
+smoker_or_big_tip <- subset(tips, smoker == "Yes" | tip > 6)
+cat("Smokers or big tippers:", nrow(smoker_or_big_tip), "\n")
+head(smoker_or_big_tip)
+
+
+### -----------------------------------------------------
+### Method 2: Using dplyr::filter()
+### -----------------------------------------------------
+
+# Example 1: Filter bills under $10
+small_bills <- tips |>
+  filter(total_bill < 10)
+
+cat("Number of small bills (< 10):", nrow(small_bills), "\n")
+summary(small_bills$total_bill)
+
+# Example 2: Filter females who are non-smokers
+female_non_smokers <- tips |>
+  filter(sex == "Female", smoker == "No")
+
+cat("Female non-smokers:", nrow(female_non_smokers), "\n")
+head(female_non_smokers)
+
+# Example 3: Filter by set of days using %in%
+# Only Friday and Saturday entries
+fri_sat_tips <- tips |>
+  filter(day %in% c("Fri", "Sat"))
+
+cat("Tips on Fri or Sat:", nrow(fri_sat_tips), "\n")
+table(fri_sat_tips$day)
