@@ -1,0 +1,35 @@
+Practical No. 10
+library(dplyr)
+
+
+titanic <- read.csv("titanic_submission.csv", na.strings = c("", "NA"))
+
+print("--- Original Titanic Data (First 6 Rows) ---")
+print(head(titanic))
+
+
+titanic_clean <- titanic %>%
+  mutate(
+    Age = ifelse(is.na(Age), median(Age, na.rm = TRUE), Age),
+    Fare = ifelse(is.na(Fare), median(Fare, na.rm = TRUE), Fare)
+  )
+
+
+titanic_features <- titanic_clean %>%
+  mutate(
+   
+    FamilySize = SibSp + Parch + 1,
+    IsAlone = ifelse(FamilySize == 1, TRUE, FALSE),
+    Fare_per_Person = Fare / FamilySize,
+    AgeGroup = case_when(
+      Age < 13 ~ "Child",
+      Age >= 13 & Age < 20 ~ "Teen",
+      Age >= 20 & Age < 60 ~ "Adult",
+      TRUE ~ "Senior"
+    )
+  )
+
+print("--- Titanic with New Features ---")
+print(head(titanic_features %>% 
+             select(PassengerId, Age, SibSp, Parch, FamilySize, IsAlone, Fare, Fare_per_Person, AgeGroup)))
+
