@@ -1,0 +1,45 @@
+Practical No. 9
+
+library(stringr)
+library(tidyr)
+library(dplyr)
+
+
+
+logistics <- read.csv("Delivery_Logistics.csv")
+
+print("--- Original Dataset (First 6 Rows) ---")
+print(head(logistics))
+
+
+logistics$Country_Code <- str_sub(logistics$Order_ID, 1, 2)
+
+
+logistics$Order_Year <- str_sub(logistics$Order_ID, 4, 7)
+
+
+logistics$Order_Num <- str_sub(logistics$Order_ID, -4, -1)
+
+print("--- Data after str_sub() ---")
+print(logistics %>% select(Order_ID, Country_Code, Order_Year, Order_Num) %>% head())
+
+
+split_list <- str_split(logistics$Delivery_Type, " - ")
+print("--- Basic Split Output (First Row) ---")
+print(split_list[[1]])
+
+
+split_matrix <- str_split(logistics$Delivery_Type, " - ", simplify = TRUE)
+logistics$Main_Type <- split_matrix[,1]
+logistics$Sub_Type  <- split_matrix[,2]
+
+print("--- Data after str_split() (Manual Assignment) ---")
+print(logistics %>% select(Delivery_Type, Main_Type, Sub_Type) %>% head())
+
+
+tidy_data <- logistics %>%
+  separate(Order_ID, into = c("Country", "Year", "Number"), sep = "-", remove = FALSE)
+
+print("--- Bonus: The 'separate' function ---")
+print(tidy_data %>% select(Order_ID, Country, Year, Number) %>% head())
+
