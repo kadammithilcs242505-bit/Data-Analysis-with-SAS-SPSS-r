@@ -1,0 +1,53 @@
+Practical No. 8 
+
+library(dplyr)
+library(tidyr)  # Contains replace_na()
+
+
+students <- read.csv("StudentsPerformance.csv", na.strings = c("", "NA"))
+
+print("--- 1. Original Data (First 6 Rows) ---")
+print(head(students))
+
+
+print("--- Count of Missing Values per Column ---")
+print(colSums(is.na(students)))
+
+
+set.seed(123)
+students$math.score[sample(1:nrow(students), 10)] <- NA
+students$reading.score[sample(1:nrow(students), 5)] <- NA
+students$parental.level.of.education[sample(1:nrow(students), 3)] <- NA
+
+print("--- Data after adding some missing values ---")
+print(head(students, 10))
+print(colSums(is.na(students)))
+
+
+
+clean_omit <- na.omit(students)
+
+print("--- 2. Data after na.omit() ---")
+print(paste("Original rows:", nrow(students)))
+print(paste("Rows remaining:", nrow(clean_omit)))
+print(head(clean_omit, 6))
+
+
+avg_math <- mean(students$math.score, na.rm = TRUE)
+avg_reading <- mean(students$reading.score, na.rm = TRUE)
+
+clean_replace <- students %>%
+  replace_na(list(
+    parental.level.of.education = "Unknown",
+    math.score = avg_math,
+    reading.score = avg_reading
+  ))
+
+print("--- 3. Data after replace_na() ---")
+
+print(head(clean_replace, 10))
+
+
+print("--- Remaining NAs after replacement ---")
+print(colSums(is.na(clean_replace)))
+
