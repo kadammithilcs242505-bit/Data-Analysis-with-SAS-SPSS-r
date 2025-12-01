@@ -1,0 +1,33 @@
+Practical No. 6
+library(dplyr)  # for bind_rows
+
+
+h18 <- read.csv("2018.csv")
+h19 <- read.csv("2019.csv")
+
+print("--- Happiness 2018 ---")
+print(head(h18))
+print("--- Happiness 2019 ---")
+print(head(h19))
+
+
+merged_data <- merge(
+  h18,
+  h19,
+  by = "Country or region",
+  suffixes = c("_2018", "_2019")
+)
+
+print("--- Merged Data (2018 + 2019 Columns Added) ---")
+print(head(merged_data))
+
+
+
+h18$Year <- 2018
+h19$Year <- 2019
+
+combined_data <- bind_rows(h18, h19)
+
+print("--- Combined Data (Rows Added for 2018 & 2019) ---")
+print(head(combined_data))
+
