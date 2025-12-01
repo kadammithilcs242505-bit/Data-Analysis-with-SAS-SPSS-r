@@ -1,0 +1,49 @@
+Practical No. 7
+library(dplyr)  # select() comes from dplyr
+
+movies <- read.csv("tmdb_5000_movies.csv")
+
+print("--- Original Dataset (First 3 rows) ---")
+print(head(movies, 3))
+
+
+selected_cols <- movies %>%
+  select(title, budget, revenue)
+
+print("--- Selected Specific Columns (title, budget, revenue) ---")
+print(head(selected_cols, 3))
+
+
+range_cols <- movies %>%
+  select(budget:popularity)
+
+print("--- Selected Range of Columns (budget to popularity) ---")
+print(head(range_cols, 3))
+
+
+starts_with_vote <- movies %>%
+  select(starts_with("vote"))
+
+print("--- Selected columns starting with 'vote' ---")
+print(head(starts_with_vote, 3))
+
+
+dropped_one <- movies %>%
+  select(-homepage)
+
+print("--- Dataset with 'homepage' dropped ---")
+print(names(dropped_one))
+
+
+dropped_multiple <- movies %>%
+  select(-overview, -tagline)
+
+print("--- Dataset with 'overview' and 'tagline' dropped ---")
+print(names(dropped_multiple))
+
+dropped_range <- movies %>%
+  select(-(production_companies:popularity))
+
+print("--- Dataset with range 'production_companies' to 'popularity' dropped ---")
+print(names(dropped_range))
+
