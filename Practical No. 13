@@ -1,0 +1,74 @@
+library(dplyr)
+
+# 1. LOAD DATA AND SELECT RELEVANT COLUMNS
+sw <- starwars %>%
+  select(name, species, gender, homeworld, birth_year)
+
+# 2. CREATE INTENTIONAL DUPLICATES
+sw_dup <- rbind(
+  sw[1:5, ],
+  sw[1, ],   # duplicate row 1
+  sw[2, ],   # duplicate row 2
+  sw[2, ],   # another duplicate row 2
+  sw[10, ],  # duplicate row 10
+  sw[11, ],  # duplicate row 11
+  sw[3, ],   # duplicate row 3
+  sw[3, ]    # another duplicate row 3
+)
+
+print("--- Original Dataset with Duplicates ---")
+print(sw_dup)
+
+# 3. IDENTIFY FULL-ROW DUPLICATES USING group_by() + count()
+duplicates_report <- sw_dup %>%
+  group_by(name, species, gender, homeworld, birth_year) %>%
+  count() %>%
+  filter(n > 1)
+
+print("--- Full-Row Duplicates Found ---")
+print(duplicates_report)
+
+# 4. FLAG DUPLICATES USING duplicated()
+sw_dup <- sw_dup %>%
+  mutate(
+    Duplicate_Flag = duplicated(.) | duplicated(., fromLast = TRUE)
+  )
+
+print("--- Dataset with Duplicate Flag ---")
+print(sw_dup)
+
+# 5. REMOVE EXACT DUPLICATES
+clean_exact <- sw_dup %>%
+  distinct() %>%
+  select(-Duplicate_Flag)
+
+print("--- Exact Duplicates Removed ---")
+print(clean_exact)
+
+# 6. REMOVE DUPLICATES BY NAME ONLY (KEEP FIRST OCCURRENCE)
+unique_names <- sw_dup %>%
+  distinct(name, .keep_all = TRUE) %>%
+  select(-Duplicate_Flag)
+
+print("--- Unique Characters by Name ---")
+print(unique_names)
+
+# 7. DUPLICATE SUMMARY BY SPECIES AND GENDER
+species_gender_summary <- sw_dup %>%
+  group_by(species, gender) %>%
+  summarise(
+    Count = n(),
+    Duplicates = sum(Duplicate_Flag),
+    .groups = "drop"
+  ) %>%
+  arrange(desc(Count))
+
+print("--- Summary of Counts and Duplicates by Species and Gender ---")
+print(species_gender_summary)
+
+# 8. SORT CLEAN DATA BY NAME
+clean_sorted <- clean_exact %>%
+  arrange(name)
+
+print("--- Clean Dataset Sorted by Name ---")
+print(clean_sorted)
