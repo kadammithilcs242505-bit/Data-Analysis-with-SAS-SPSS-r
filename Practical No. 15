@@ -1,0 +1,57 @@
+library(dplyr)
+
+# 1. LOAD DATA
+data(mtcars)
+car_df <- mtcars
+print("--- Data Loaded ---")
+
+# 2. INSPECT STRUCTURE
+print("--- OUTPUT OF str() ---")
+str(car_df)
+
+# 3. BASIC SUMMARY (Before converting any columns)
+print("--- OUTPUT OF summary() [Before Factor Conversion] ---")
+summary(car_df)
+
+# 4. CONVERT NUMERIC COLUMNS TO FACTORS
+# Example: cyl (cylinders), gear, am (transmission), vs (engine)
+car_df <- car_df %>%
+  mutate(
+    cyl = as.factor(cyl),
+    gear = as.factor(gear),
+    am = as.factor(am),
+    vs = as.factor(vs)
+  )
+
+print("--- OUTPUT OF summary() [After Factor Conversion] ---")
+summary(car_df)
+
+# 5. NUMERIC SUMMARIES
+numeric_cols <- car_df %>% select(where(is.numeric))
+numeric_summary <- numeric_cols %>%
+  summarise(across(everything(), list(
+    Mean = ~mean(.),
+    Median = ~median(.),
+    Min = ~min(.),
+    Max = ~max(.),
+    SD = ~sd(.)
+  )))
+
+print("--- Detailed Numeric Summaries ---")
+print(round(numeric_summary, 2))
+
+# 6. FACTOR COUNTS
+factor_cols <- car_df %>% select(where(is.factor))
+for(col in names(factor_cols)){
+  cat(paste0("\nCounts for factor column '", col, "':\n"))
+  print(table(factor_cols[[col]]))
+}
+
+# 7. ACCESSING SPECIFIC VALUES
+avg_mpg <- mean(car_df$mpg)
+median_hp <- median(car_df$hp)
+max_wt <- max(car_df$wt)
+
+print(paste("Average MPG:", round(avg_mpg, 2)))
+print(paste("Median Horsepower:", median_hp))
+print(paste("Maximum Weight:", max_wt))
