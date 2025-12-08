@@ -1,0 +1,34 @@
+library(lubridate)
+library(dplyr)
+
+# 1. SETUP: Load airquality and create Date column
+data(airquality)
+aq_df <- airquality %>%
+  mutate(
+    Date = as.Date(paste(1973, Month, Day, sep = "-"))
+  )
+
+# 2. PARSE AND EXTRACT DATE COMPONENTS
+processed_aq <- aq_df %>%
+  mutate(
+    Year_Num = year(Date),
+    Month_Num = month(Date),
+    Month_Name = month(Date, label = TRUE),
+    Day_Num = day(Date),
+    Weekday_Num = wday(Date),
+    Weekday_Name = wday(Date, label = TRUE, abbr = FALSE),
+    Quarter = quarter(Date),
+    Day_of_Year = yday(Date)
+  )
+
+print("--- Airquality Data with Extracted Date Components ---")
+print(head(processed_aq, 10))
+
+# 3. SYSTEM DATE: Extract components from current timestamp
+current_time <- now()
+print("--- Current Time Extraction ---")
+print(paste("Current Year:", year(current_time)))
+print(paste("Current Month:", month(current_time)))
+print(paste("Current Day:", day(current_time)))
+print(paste("Current Hour:", hour(current_time)))
+print(paste("Current Minute:", minute(current_time)))
