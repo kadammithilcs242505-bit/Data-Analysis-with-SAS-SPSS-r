@@ -1,0 +1,49 @@
+library(dplyr)
+library(tidyr)
+
+# 1. CREATE SAMPLE DATA
+retail_df <- data.frame(
+  ProductID = 1:5,
+  Category = c("Electronics", "Clothing", "Electronics", "Home", "Clothing"),
+  Price = c(500.50, 75.00, 1200.00, 300.00, 50.00),
+  Discount = c(50, 10, 200, 30, 5),
+  Stock = c(20, 50, 10, 15, 100)
+)
+
+print("--- Original Wide Dataset ---")
+print(retail_df)
+
+# 2. PIVOT LONGER: Wide -> Long
+# Combine Price, Discount, and Stock into a 'Metric' column
+long_df <- retail_df %>%
+  pivot_longer(
+    cols = c(Price, Discount, Stock),
+    names_to = "Metric",
+    values_to = "Value"
+  )
+
+print("--- Long Format (pivot_longer) ---")
+print(long_df)
+
+# 3. PIVOT WIDER: Long -> Wide
+# Spread the 'Metric' column back into separate columns
+wide_df <- long_df %>%
+  pivot_wider(
+    names_from = Metric,
+    values_from = Value
+  )
+
+print("--- Wide Format (pivot_wider) ---")
+print(wide_df)
+
+# 4. ADVANCED EXAMPLE: Pivot by Category
+# Create a table with ProductID as rows and Categories as columns showing Price
+category_pivot <- retail_df %>%
+  select(ProductID, Category, Price) %>%
+  pivot_wider(
+    names_from = Category,
+    values_from = Price
+  )
+
+print("--- Category Pivot Table ---")
+print(category_pivot)
