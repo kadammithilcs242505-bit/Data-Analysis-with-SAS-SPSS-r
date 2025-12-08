@@ -1,0 +1,47 @@
+# Load dataset
+data(iris)
+
+print("--- Data Structure Before Transformation ---")
+print(names(iris))   # Shows the original iris columns
+
+
+
+iris_A <- iris[1:75, ]
+
+# Last 75 rows → dataset B
+iris_B <- iris[76:150, ]
+
+print("--- Dataset A Preview ---")
+print(head(iris_A))
+
+print("--- Dataset B Preview ---")
+print(head(iris_B))
+
+
+
+
+# Species + one measurement (Height)
+iris_A_clean <- iris_A[, c("Species", "Sepal.Length")]
+iris_B_clean <- iris_B[, c("Species", "Sepal.Length")]
+
+# Rename Sepal.Length → Height
+names(iris_A_clean) <- c("Species", "Height")
+names(iris_B_clean) <- c("Species", "Height")
+
+# Ensure numeric
+iris_A_clean$Height <- as.numeric(iris_A_clean$Height)
+iris_B_clean$Height <- as.numeric(iris_B_clean$Height)
+
+
+
+combined_data <- rbind(iris_A_clean, iris_B_clean)
+
+print("--- Combined Data Summary ---")
+print(paste("Rows in A:", nrow(iris_A_clean)))
+print(paste("Rows in B:", nrow(iris_B_clean)))
+print(paste("Total Expected:", nrow(iris_A_clean) + nrow(iris_B_clean)))
+print(paste("Total Actual:", nrow(combined_data)))
+
+print("--- Preview of Combined Data (Top & Bottom) ---")
+print(head(combined_data))
+print(tail(combined_data))
