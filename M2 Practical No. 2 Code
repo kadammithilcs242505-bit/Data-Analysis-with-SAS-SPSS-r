@@ -1,0 +1,63 @@
+library(dplyr)
+
+# Convert HairEyeColor table to a data frame
+df <- as.data.frame(HairEyeColor)
+
+# Inspect the dataset
+print("=== STRUCTURE OF THE DATASET ===")
+str(df)
+
+print("=== COLUMN NAMES ===")
+colnames(df)
+
+print("=== FIRST 10 ROWS ===")
+print(head(df, 10))
+
+# Base R frequency tables
+hair_counts <- table(df$Hair)
+eye_counts <- table(df$Eye)
+sex_counts <- table(df$Sex)
+
+print("=== Frequency Table: Hair Color ===")
+print(hair_counts)
+
+print("=== Frequency Table: Eye Color ===")
+print(eye_counts)
+
+print("=== Frequency Table: Sex ===")
+print(sex_counts)
+
+# dplyr count() for data frame format
+hair_df <- df %>% count(Hair)
+eye_df <- df %>% count(Eye)
+sex_df <- df %>% count(Sex)
+
+print("=== Hair Color Frequency (Data Frame Format) ===")
+print(hair_df)
+
+print("=== Eye Color Frequency (Data Frame Format) ===")
+print(eye_df)
+
+print("=== Sex Frequency (Data Frame Format) ===")
+print(sex_df)
+
+# Frequency of Hair and Eye color combinations
+hair_eye_df <- df %>% count(Hair, Eye)
+print("=== Frequency Table: Hair and Eye Color Combinations ===")
+print(hair_eye_df)
+
+# Frequency of Hair, Eye, and Sex combinations
+hair_eye_sex_df <- df %>% count(Hair, Eye, Sex)
+print("=== Frequency Table: Hair, Eye, and Sex Combinations ===")
+print(hair_eye_sex_df)
+
+# Sorted frequency tables for better readability
+print("=== Hair Color Frequency (Descending) ===")
+print(hair_df %>% arrange(desc(n)))
+
+print("=== Eye Color Frequency (Descending) ===")
+print(eye_df %>% arrange(desc(n)))
+
+print("=== Sex Frequency (Descending) ===")
+print(sex_df %>% arrange(desc(n)))
+
