@@ -1,0 +1,52 @@
+library(dplyr)
+library(psych)
+
+df <- read.csv("avocado.csv")
+
+print("=== PRACTICAL: DESCRIPTIVE STATISTICS ON AVOCADO DATASET ===")
+
+print("1. Structure of Dataset")
+str(df)
+
+print("2. First 10 Rows of the Dataset")
+print(head(df, 10))
+
+print("3. Summary of All Columns")
+print(summary(df))
+
+print("4. Summary of AveragePrice")
+print(summary(df$AveragePrice))
+
+print("5. Summary of Total Volume")
+print(summary(df$Total.Volume))
+
+print("6. Summary of Small Bags")
+print(summary(df$Small.Bags))
+
+print("7. Detailed Description for Price and Volume Variables")
+describe_vars <- df %>%
+  select(AveragePrice, Total.Volume, X4046, X4225, X4770, Total.Bags) 
+print(describe(describe_vars))
+
+print("8. Grouped Summary by Type")
+grouped_type <- df %>%
+  group_by(type) %>%
+  summarise(
+    avg_price_mean = mean(AveragePrice, na.rm = TRUE),
+    volume_mean = mean(Total.Volume, na.rm = TRUE),
+    small_bags_mean = mean(Small.Bags, na.rm = TRUE),
+    .groups = "drop"
+  )
+print(grouped_type)
+
+print("9. Grouped Summary by Year")
+grouped_year <- df %>%
+  group_by(year) %>%
+  summarise(
+    avg_price = mean(AveragePrice, na.rm = TRUE),
+    vol = mean(Total.Volume, na.rm = TRUE),
+    .groups = "drop"
+  )
+print(grouped_year)
+
+print("=== END OF DESCRIPTIVE STATISTICS PRACTICAL ===")
