@@ -1,0 +1,21 @@
+rm(list = ls())
+
+data <- read.csv("winequality.csv")
+
+head(data)
+
+str(data)
+
+table(data$`fixed acidity`, data$`volatile acidity`)
+
+table(data$`fixed acidity`, data$`citric acid`)
+
+table(data$`fixed acidity`, data$`residual sugar`)
+
+table(data$`volatile acidity`, data$`citric acid`)
+
+table(data$`volatile acidity`, data$`residual sugar`)
+
+table(data$`citric acid`, data$`residual sugar`)
+
+addmargins(table(data$`fixed acidity`, data$`volatile acidity`))
