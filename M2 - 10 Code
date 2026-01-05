@@ -1,0 +1,45 @@
+library(ggplot2)
+library(dplyr)
+
+diamonds <- read.csv("diamonds.csv")
+
+str(diamonds)
+summary(diamonds)
+head(diamonds)
+
+unique(diamonds$cut)
+unique(diamonds$color)
+unique(diamonds$clarity)
+
+ggplot(diamonds, aes(x = price)) +
+  geom_histogram(binwidth = 500, fill = "skyblue", color = "black") +
+  labs(title = "Histogram of Diamond Prices", x = "Price", y = "Count") +
+  theme_minimal()
+
+ggplot(diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Scatter Plot of Price vs Carat by Cut", x = "Carat", y = "Price") +
+  theme_minimal()
+
+ggplot(diamonds, aes(x = cut, y = price, fill = cut)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Price by Cut", x = "Cut", y = "Price") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplot(diamonds, aes(x = color, fill = color)) +
+  geom_bar() +
+  labs(title = "Count of Diamonds by Color", x = "Color", y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point(alpha = 0.5, color = "darkgreen") +
+  facet_wrap(~clarity) +
+  labs(title = "Price vs Carat Faceted by Clarity", x = "Carat", y = "Price") +
+  theme_minimal()
+
+library(GGally)
+numeric_vars <- diamonds %>% select(carat, depth, table, x, y, z, price)
+ggpairs(numeric_vars)
+
