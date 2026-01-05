@@ -1,0 +1,10 @@
+
+ilpd <- read.csv("Indian Liver Patient Dataset (ILPD).csv")
+
+ilpd$gender <- as.factor(ilpd$gender)
+
+anova_model <- aov(tot_bilirubin ~ gender, data = ilpd)
+
+
+summary(anova_model)
+
