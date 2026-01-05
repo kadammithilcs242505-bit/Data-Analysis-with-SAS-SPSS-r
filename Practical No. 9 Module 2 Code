@@ -1,0 +1,23 @@
+countries <- read.csv("countries.csv")
+
+
+str(countries)
+
+
+countries$Region <- as.factor(countries$Region)
+countries$Data.Quality <- as.factor(countries$Data.Quality)
+
+contingency_table <- table(countries$Region, countries$Data.Quality)
+
+
+print(contingency_table)
+
+
+chi_result <- chisq.test(contingency_table)
+
+
+print(chi_result)
+
+
+print(chi_result$expected)
+
