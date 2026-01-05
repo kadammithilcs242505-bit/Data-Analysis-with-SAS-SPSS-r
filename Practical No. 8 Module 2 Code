@@ -1,1 +1,16 @@
+cars_data <- read.csv("cars.csv")
+
+
+str(cars_data)
+
+
+cars_data$cyl <- as.factor(cars_data$cyl)
+cars_data$gear <- as.factor(cars_data$gear)
+
+
+anova_model <- aov(mpg ~ cyl * gear, data = cars_data)
+
+
+summary(anova_model)
+
 
