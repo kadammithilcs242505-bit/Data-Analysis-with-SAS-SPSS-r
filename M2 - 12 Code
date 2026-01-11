@@ -1,0 +1,28 @@
+rm(list = ls())
+
+library(dplyr)
+
+amazon_data <- read.csv("amazon.csv", stringsAsFactors = FALSE)
+
+head(amazon_data)
+
+str(amazon_data)
+
+summary(amazon_data)
+
+amazon_numeric <- amazon_data %>%
+  select(discounted_price, actual_price, discount_percentage)
+
+sapply(amazon_numeric, class)
+
+colSums(is.na(amazon_numeric))
+
+amazon_clean <- na.omit(amazon_numeric)
+
+summary(amazon_clean)
+
+correlation_matrix <- cor(amazon_clean)
+
+print(correlation_matrix)
+
+correlation_matrix
