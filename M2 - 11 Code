@@ -1,0 +1,32 @@
+library(ggplot2)
+library(dplyr)
+
+matches <- read.csv("ipl.csv", stringsAsFactors = FALSE)
+
+matches <- matches %>% filter(!is.na(winner))
+
+matches$win_count <- 1
+
+team_win_data <- matches %>%
+  group_by(winner) %>%
+  mutate(cumulative_wins = cumsum(win_count))
+
+ggplot(team_win_data, aes(x = cumulative_wins)) +
+  geom_histogram(binwidth = 5, fill = "steelblue", color = "black") +
+  labs(
+    title = "Histogram of Cumulative Match Wins",
+    x = "Number of Wins",
+    y = "Frequency"
+  ) +
+  theme_minimal()
+
+ggplot(team_win_data, aes(x = winner, y = cumulative_wins)) +
+  geom_boxplot(fill = "orange") +
+  coord_flip() +
+  labs(
+    title = "Box Plot of Team-wise Match Wins",
+    x = "Team",
+    y = "Cumulative Wins"
+  ) +
+  theme_minimal()
+
